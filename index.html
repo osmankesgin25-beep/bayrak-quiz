@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Flags Quiz</title>
+    <!-- AdMob Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .game-container {
+            background: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 350px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        /* Üst Kontroller - ÇOK KÜÇÜK */
+        .top-bar {
+            background: linear-gradient(to right, #4a6fa5, #5d8cc9);
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .game-title {
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .stats-container {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            color: white;
+        }
+        
+        .stat-value {
+            font-size: 0.9rem;
+            font-weight: bold;
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: 0.5rem;
+            opacity: 0.9;
+        }
+        
+        /* REKLAMLAR - ÇOK KÜÇÜK */
+        .ad-container {
+            width: 100%;
+            height: 30px;
+            background: #f8f9fa;
+            margin: 3px 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            border: 1px solid #e0e0e0;
+            font-size: 0.6rem;
+        }
+        
+        .ad-label {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 1px 3px;
+            border-radius: 3px;
+            font-size: 0.4rem;
+            color: #666;
+        }
+        
+        /* Oyun Alanı - ÇOK KÜÇÜK */
+        .game-area {
+            padding: 10px;
+        }
+        
+        /* Dil Seçim Butonu - SOL ÜST */
+        .language-selector-btn {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            z-index: 10;
+        }
+        
+        .language-btn {
+            padding: 4px 8px;
+            border: 1px solid #4a6fa5;
+            border-radius: 8px;
+            background: white;
+            color: #4a6fa5;
+            font-size: 0.7rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* Dil Seçim Menüsü - GİZLİ */
+        .language-menu {
+            position: absolute;
+            top: 35px;
+            left: 5px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 8px;
+            max-height: 150px;
+            overflow-y: auto;
+            display: none;
+            z-index: 100;
+            min-width: 120px;
+        }
+        
+        .language-menu.active {
+            display: block;
+        }
+        
+        .lang-option {
+            padding: 6px 8px;
+            border: none;
+            border-radius: 6px;
+            background: white;
+            color: #333;
+            font-size: 0.7rem;
+            cursor: pointer;
+            text-align: left;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 2px;
+        }
+        
+        .lang-option:hover {
+            background: #f0f7ff;
+        }
+        
+        .lang-option.active {
+            background: #4a6fa5;
+            color: white;
+        }
+        
+        /* Zorluk Butonları - KÜÇÜK */
+        .difficulty-buttons {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        
+        .diff-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+        
+        .easy-btn {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .medium-btn {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .hard-btn {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .diff-btn.active {
+            transform: scale(1.02);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Bayrak - KÜÇÜK */
+        .flag-section {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .flag-display {
+            width: 80px;
+            height: 60px;
+            margin: 0 auto 8px;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 2px solid #4a6fa5;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            line-height: 1;
+        }
+        
+        .question-text {
+            font-size: 0.8rem;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        
+        .current-language {
+            font-size: 0.65rem;
+            color: #666;
+            font-style: italic;
+        }
+        
+        /* Timer - KÜÇÜK */
+        .timer-section {
+            margin: 8px 0;
+            text-align: center;
+        }
+        
+        .timer-display {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #4a6fa5;
+            font-family: monospace;
+            margin-bottom: 4px;
+        }
+        
+        .time-bar {
+            width: 100%;
+            height: 5px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .time-fill {
+            height: 100%;
+            background: linear-gradient(to right, #27ae60, #f39c12, #e74c3c);
+            border-radius: 2px;
+            transition: width 1s linear;
+            width: 100%;
+        }
+        
+        /* Video Reklam Butonu - KÜÇÜK */
+        .video-reward-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 5px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            width: 100%;
+        }
+        
+        /* Cevap Seçenekleri - KÜÇÜK */
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        
+        .option-btn {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 35px;
+        }
+        
+        .option-btn.correct {
+            background: #27ae60;
+            color: white;
+            border-color: #219653;
+        }
+        
+        .option-btn.wrong {
+            background: #e74c3c;
+            color: white;
+            border-color: #c0392b;
+        }
+        
+        /* Sonuç Ekranı - KÜÇÜK */
+        .result-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 10px;
+        }
+        
+        .result-card {
+            background: white;
+            padding: 15px 10px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 300px;
+            width: 100%;
+        }
+        
+        .result-emoji {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+        
+        .result-title {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin: 10px 0;
+        }
+        
+        .result-stat {
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .result-stat .stat-value {
+            font-size: 1.2rem;
+            color: #4a6fa5;
+        }
+        
+        .restart-game {
+            padding: 10px 20px;
+            background: #4a6fa5;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            width: 100%;
+        }
+        
+        /* Interstitial Reklam */
+        .interstitial-ad-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 10px;
+        }
+        
+        .interstitial-content {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            max-width: 300px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .interstitial-content h2 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .interstitial-content p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.4;
+            font-size: 0.8rem;
+        }
+        
+        .interstitial-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+        
+        .interstitial-buttons button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+            font-size: 0.8rem;
+        }
+        
+        .interstitial-close {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .interstitial-watch {
+            background: #4a6fa5;
+            color: white;
+        }
+        
+        /* Responsive */
+        @media (max-width: 480px) {
+            .game-container {
+                max-width: 320px;
+            }
+            
+            .flag-display {
+                width: 70px;
+                height: 50px;
+                font-size: 25px;
+            }
+            
+            .question-text {
+                font-size: 0.75rem;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .game-container {
+                max-width: 300px;
+            }
+            
+            .stat-value {
+                font-size: 0.8rem;
+            }
+            
+            .flag-display {
+                width: 60px;
+                height: 45px;
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Interstitial Reklam -->
+    <div class="interstitial-ad-overlay" id="interstitialAd">
+        <div class="interstitial-content">
+            <h2 id="adTitle">Watch ad to continue!</h2>
+            <p id="adDescription">You can continue the game and earn extra rewards by watching ads.</p>
+            <div class="interstitial-buttons">
+                <button class="interstitial-close" onclick="closeInterstitial()">Close</button>
+                <button class="interstitial-watch" onclick="watchRewardVideo()">Watch Video</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="game-container">
+        <!-- Üst Banner Reklam -->
+        <div class="ad-container" id="topBannerAd">
+            <div class="ad-label">Ad</div>
+            <!-- AdMob Banner Reklamı -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+                 data-ad-slot="1234567890"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+        </div>
+        
+        <!-- Dil Seçim Butonu -->
+        <div class="language-selector-btn">
+            <button class="language-btn" onclick="toggleLanguageMenu()">
+                <span>🌐</span>
+                <span id="currentLangCode">EN</span>
+            </button>
+            <div class="language-menu" id="languageMenu">
+                <!-- Diller buraya JavaScript ile eklenecek -->
+            </div>
+        </div>
+        
+        <!-- Üst Kontroller -->
+        <div class="top-bar">
+            <div class="game-title">Flags Quiz</div>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-value" id="score">0</div>
+                    <div class="stat-label">Score</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="questions">0/10</div>
+                    <div class="stat-label">Q</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="streak">0</div>
+                    <div class="stat-label">Streak</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Oyun Alanı -->
+        <div class="game-area">
+            <!-- Zorluk Seçimi -->
+            <div class="difficulty-buttons">
+                <button class="diff-btn easy-btn active" data-diff="easy">Easy</button>
+                <button class="diff-btn medium-btn" data-diff="medium">Medium</button>
+                <button class="diff-btn hard-btn" data-diff="hard">Hard</button>
+            </div>
+            
+            <!-- Bayrak Bölümü -->
+            <div class="flag-section">
+                <div class="flag-display" id="flagDisplay">🏳️</div>
+                <div class="question-text" id="questionText">Which country does this flag belong to?</div>
+                <div class="current-language" id="currentLanguage">English</div>
+            </div>
+            
+            <!-- Timer -->
+            <div class="timer-section">
+                <div class="timer-display" id="timerDisplay">20</div>
+                <div class="time-bar">
+                    <div class="time-fill" id="timeFill"></div>
+                </div>
+            </div>
+            
+            <!-- Video Reklam Butonu -->
+            <button class="video-reward-btn" id="videoRewardBtn" onclick="showRewardVideoAd()">
+                <span>🎬</span>
+                <span id="rewardText">+10 sec Video</span>
+            </button>
+            
+            <!-- Cevap Seçenekleri -->
+            <div class="options-container" id="optionsContainer">
+                <!-- Seçenekler buraya eklenecek -->
+            </div>
+        </div>
+        
+        <!-- Alt Reklam -->
+        <div class="ad-container" id="bottomBannerAd">
+            <div class="ad-label">Ad</div>
+            <!-- AdMob Banner Reklamı -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+                 data-ad-slot="0987654321"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+        </div>
+    </div>
+    
+    <!-- Sonuç Ekranı -->
+    <div class="result-screen" id="resultScreen">
+        <div class="result-card">
+            <div class="result-emoji" id="resultEmoji">🏆</div>
+            <div class="result-title" id="resultTitle">Game Over!</div>
+            <div class="result-stats">
+                <div class="result-stat">
+                    <div id="finalScoreLabel">Score</div>
+                    <div class="stat-value" id="finalScore">0</div>
+                </div>
+                <div class="result-stat">
+                    <div id="finalCorrectLabel">Correct</div>
+                    <div class="stat-value" id="finalCorrect">0</div>
+                </div>
+                <div class="result-stat">
+                    <div id="finalStreakLabel">Streak</div>
+                    <div class="stat-value" id="finalStreak">0</div>
+                </div>
+                <div class="result-stat">
+                    <div id="finalAccuracyLabel">Accuracy</div>
+                    <div class="stat-value" id="finalAccuracy">0%</div>
+                </div>
+            </div>
+            <button class="restart-game" onclick="restartGame()">PLAY AGAIN</button>
+        </div>
+    </div>
+
+    <script>
+        // Oyun verileri
+        const gameData = {
+            score: 0,
+            correctAnswers: 0,
+            totalQuestions: 0,
+            currentStreak: 0,
+            maxStreak: 0,
+            currentLanguage: 'en',
+            currentDifficulty: 'easy',
+            timer: 20,
+            timerInterval: null,
+            isGameActive: false,
+            currentQuestion: null,
+            adCounter: 0,
+            lastAdTime: 0,
+            videoRewardAvailable: true,
+            questionsSinceLastAd: 0
+        };
+
+        // TÜM DİLLER (12 dil)
+        const languages = [
+            { code: 'en', flag: '🇺🇸', name: 'English' },
+            { code: 'tr', flag: '🇹🇷', name: 'Türkçe' },
+            { code: 'es', flag: '🇪🇸', name: 'Español' },
+            { code: 'fr', flag: '🇫🇷', name: 'Français' },
+            { code: 'de', flag: '🇩🇪', name: 'Deutsch' },
+            { code: 'it', flag: '🇮🇹', name: 'Italiano' },
+            { code: 'pt', flag: '🇵🇹', name: 'Português' },
+            { code: 'ru', flag: '🇷🇺', name: 'Русский' },
+            { code: 'ar', flag: '🇸🇦', name: 'العربية' },
+            { code: 'zh', flag: '🇨🇳', name: '中文' },
+            { code: 'ja', flag: '🇯🇵', name: '日本語' },
+            { code: 'hi', flag: '🇮🇳', name: 'हिन्दी' }
+        ];
+
+        // TÜM DİL ÇEVİRİLERİ
+        const translations = {
+            en: { question: "Which country does this flag belong to?", score: "Score", correct: "Correct", streak: "Streak", easy: "Easy", medium: "Medium", hard: "Hard", rewardText: "+10 sec Video", langName: "English" },
+            tr: { question: "Bu bayrak hangi ülkeye aittir?", score: "Puan", correct: "Doğru", streak: "Seri", easy: "Kolay", medium: "Orta", hard: "Zor", rewardText: "+10 san Video", langName: "Türkçe" },
+            es: { question: "¿A qué país pertenece esta bandera?", score: "Puntuación", correct: "Correctas", streak: "Racha", easy: "Fácil", medium: "Medio", hard: "Difícil", rewardText: "+10 seg Video", langName: "Español" },
+            fr: { question: "À quel país pertenece ce drapeau ?", score: "Score", correct: "Correctes", streak: "Série", easy: "Facile", medium: "Moyen", hard: "Difficile", rewardText: "+10 sec Vidéo", langName: "Français" },
+            de: { question: "Zu welchem Land gehört diese Flagge?", score: "Punkte", correct: "Richtig", streak: "Serie", easy: "Einfach", medium: "Mittel", hard: "Schwer", rewardText: "+10 sek Video", langName: "Deutsch" },
+            it: { question: "A quale paese appartiene questa bandiera?", score: "Punteggio", correct: "Corrette", streak: "Serie", easy: "Facile", medium: "Medio", hard: "Difficile", rewardText: "+10 sec Video", langName: "Italiano" },
+            pt: { question: "A qual país pertence esta bandeira?", score: "Pontuação", correct: "Corretas", streak: "Sequência", easy: "Fácil", medium: "Médio", hard: "Difícil", rewardText: "+10 seg Video", langName: "Português" },
+            ru: { question: "Какой стране принадлежит этот флаг?", score: "Счёт", correct: "Правильно", streak: "Серия", easy: "Легко", medium: "Средне", hard: "Сложно", rewardText: "+10 сек Видео", langName: "Русский" },
+            ar: { question: "إلى أي دولة ينتمي هذا العلم؟", score: "النقاط", correct: "صحيحة", streak: "متتالية", easy: "سهل", medium: "متوسط", hard: "صعب", rewardText: "+10 ثانية فيديو", langName: "العربية" },
+            zh: { question: "这面旗帜属于哪个国家？", score: "分数", correct: "正确", streak: "连胜", easy: "简单", medium: "中等", hard: "困难", rewardText: "+10秒视频", langName: "中文" },
+            ja: { question: "この旗はどの国に属しますか？", score: "スコア", correct: "正解", streak: "連続", easy: "簡単", medium: "普通", hard: "難しい", rewardText: "+10秒ビデオ", langName: "日本語" },
+            hi: { question: "यह ध्वज किस देश से संबंधित है?", score: "स्कोर", correct: "सही", streak: "लगातार", easy: "आसान", medium: "मध्यम", hard: "कठिन", rewardText: "+10 सेकंड वीडियो", langName: "हिन्दी" }
+        };
+
+        // Ülke verileri (kısaltılmış)
+        const countries = {
+            easy: [
+                { code: 'US', flag: '🇺🇸', names: { en: 'United States', tr: 'Amerika', es: 'Estados Unidos', fr: 'États-Unis', de: 'USA', it: 'Stati Uniti', pt: 'EUA', ru: 'США', ar: 'أمريكا', zh: '美国', ja: 'アメリカ', hi: 'अमेरिका' }},
+                { code: 'GB', flag: '🇬🇧', names: { en: 'United Kingdom', tr: 'İngiltere', es: 'Reino Unido', fr: 'Royaume-Uni', de: 'Großbritannien', it: 'Regno Unito', pt: 'Reino Unido', ru: 'Великобритания', ar: 'بريطانيا', zh: '英国', ja: 'イギリス', hi: 'ब्रिटेन' }},
+                { code: 'CN', flag: '🇨🇳', names: { en: 'China', tr: 'Çin', es: 'China', fr: 'Chine', de: 'China', it: 'Cina', pt: 'China', ru: 'Китай', ar: 'الصين', zh: '中国', ja: '中国', hi: 'चीन' }},
+                { code: 'JP', flag: '🇯🇵', names: { en: 'Japan', tr: 'Japonya', es: 'Japón', fr: 'Japon', de: 'Japan', it: 'Giappone', pt: 'Japão', ru: 'Япония', ar: 'اليابان', zh: '日本', ja: '日本', hi: 'जापान' }},
+                { code: 'DE', flag: '🇩🇪', names: { en: 'Germany', tr: 'Almanya', es: 'Alemania', fr: 'Allemagne', de: 'Deutschland', it: 'Germania', pt: 'Alemanha', ru: 'Германия', ar: 'ألمانيا', zh: '德国', ja: 'ドイツ', hi: 'जर्मनी' }},
+                { code: 'FR', flag: '🇫🇷', names: { en: 'France', tr: 'Fransa', es: 'Francia', fr: 'France', de: 'Frankreich', it: 'Francia', pt: 'França', ru: 'Франция', ar: 'فرنسا', zh: '法国', ja: 'フランス', hi: 'फ्रांस' }},
+                { code: 'IT', flag: '🇮🇹', names: { en: 'Italy', tr: 'İtalya', es: 'Italia', fr: 'Italie', de: 'Italien', it: 'Italia', pt: 'Itália', ru: 'Италия', ar: 'إيطاليا', zh: '意大利', ja: 'イタリア', hi: 'इटली' }},
+                { code: 'ES', flag: '🇪🇸', names: { en: 'Spain', tr: 'İspanya', es: 'España', fr: 'Espagne', de: 'Spanien', it: 'Spagna', pt: 'Espanha', ru: 'Испания', ar: 'إسبانيا', zh: '西班牙', ja: 'スペイン', hi: 'स्पेन' }},
+                { code: 'RU', flag: '🇷🇺', names: { en: 'Russia', tr: 'Rusya', es: 'Rusia', fr: 'Russie', de: 'Russland', it: 'Russia', pt: 'Rússia', ru: 'Россия', ar: 'روسيا', zh: '俄罗斯', ja: 'ロシア', hi: 'रूस' }},
+                { code: 'CA', flag: '🇨🇦', names: { en: 'Canada', tr: 'Kanada', es: 'Canadá', fr: 'Canada', de: 'Kanada', it: 'Canada', pt: 'Canadá', ru: 'Канада', ar: 'كندا', zh: '加拿大', ja: 'カナダ', hi: 'कनाडा' }}
+            ],
+            medium: [
+                { code: 'BE', flag: '🇧🇪', names: { en: 'Belgium', tr: 'Belçika', es: 'Bélgica', fr: 'Belgique', de: 'Belgien', it: 'Belgio', pt: 'Bélgica', ru: 'Бельгия', ar: 'بلجيكا', zh: '比利时', ja: 'ベルギー', hi: 'बेल्जियम' }},
+                { code: 'AT', flag: '🇦🇹', names: { en: 'Austria', tr: 'Avusturya', es: 'Austria', fr: 'Autriche', de: 'Österreich', it: 'Austria', pt: 'Áustria', ru: 'Австрия', ar: 'النمسا', zh: '奥地利', ja: 'オーストリア', hi: 'ऑस्ट्रिया' }},
+                { code: 'DK', flag: '🇩🇰', names: { en: 'Denmark', tr: 'Danimarka', es: 'Dinamarca', fr: 'Danemark', de: 'Dänemark', it: 'Danimarca', pt: 'Dinamarca', ru: 'Дания', ar: 'الدنمارك', zh: '丹麦', ja: 'デンマーク', hi: 'डेनमार्क' }},
+                { code: 'FI', flag: '🇫🇮', names: { en: 'Finland', tr: 'Finlandiya', es: 'Finlandia', fr: 'Finlande', de: 'Finnland', it: 'Finlandia', pt: 'Finlândia', ru: 'Финляндия', ar: 'فنلندا', zh: '芬兰', ja: 'フィンランド', hi: 'फिनलैंड' }},
+                { code: 'NO', flag: '🇳🇴', names: { en: 'Norway', tr: 'Norveç', es: 'Noruega', fr: 'Norvège', de: 'Norwegen', it: 'Norvegia', pt: 'Noruega', ru: 'Норвегия', ar: 'النرويج', zh: '挪威', ja: 'ノルウェー', hi: 'नॉर्वे' }},
+                { code: 'IE', flag: '🇮🇪', names: { en: 'Ireland', tr: 'İrlanda', es: 'Irlanda', fr: 'Irlande', de: 'Irland', it: 'Irlanda', pt: 'Irlanda', ru: 'Ирландия', ar: 'أيرلندا', zh: '爱尔兰', ja: 'アイルランド', hi: 'आयरलैंड' }},
+                { code: 'CZ', flag: '🇨🇿', names: { en: 'Czech Republic', tr: 'Çekya', es: 'República Checa', fr: 'République Tchèque', de: 'Tschechien', it: 'República Ceca', pt: 'República Tcheca', ru: 'Чехия', ar: 'التشيك', zh: '捷克', ja: 'チェコ', hi: 'चेक गणराज्य' }},
+                { code: 'HU', flag: '🇭🇺', names: { en: 'Hungary', tr: 'Macaristan', es: 'Hungría', fr: 'Hongrie', de: 'Ungarn', it: 'Ungheria', pt: 'Hungria', ru: 'Венгрия', ar: 'المجر', zh: '匈牙利', ja: 'ハンガリー', hi: 'हंगरी' }},
+                { code: 'RO', flag: '🇷🇴', names: { en: 'Romania', tr: 'Romanya', es: 'Rumanía', fr: 'Roumanie', de: 'Rumänien', it: 'Romania', pt: 'Romênia', ru: 'Румыния', ar: 'رومانيا', zh: '罗马尼亚', ja: 'ルーマニア', hi: 'रोमानिया' }},
+                { code: 'UA', flag: '🇺🇦', names: { en: 'Ukraine', tr: 'Ukrayna', es: 'Ucrania', fr: 'Ukraine', de: 'Ukraine', it: 'Ucraina', pt: 'Ucrânia', ru: 'Украина', ar: 'أوكرانيا', zh: '乌克兰', ja: 'ウクライナ', hi: 'यूक्रेन' }}
+            ],
+            hard: [
+                { code: 'IS', flag: '🇮🇸', names: { en: 'Iceland', tr: 'İzlanda', es: 'Islandia', fr: 'Islande', de: 'Island', it: 'Islanda', pt: 'Islândia', ru: 'Исландия', ar: 'آيسلندا', zh: '冰岛', ja: 'アイスランド', hi: 'आइसलैंड' }},
+                { code: 'LU', flag: '🇱🇺', names: { en: 'Luxembourg', tr: 'Lüksemburg', es: 'Luxemburgo', fr: 'Luxembourg', de: 'Luxemburg', it: 'Lussemburgo', pt: 'Luxemburgo', ru: 'Люксембург', ar: 'لوكسمبورغ', zh: '卢森堡', ja: 'ルクセンブルク', hi: 'लक्ज़मबर्ग' }},
+                { code: 'MT', flag: '🇲🇹', names: { en: 'Malta', tr: 'Malta', es: 'Malta', fr: 'Malte', de: 'Malta', it: 'Malta', pt: 'Malta', ru: 'Мальта', ar: 'مالطا', zh: '马耳他', ja: 'マルタ', hi: 'माल्टा' }},
+                { code: 'CY', flag: '🇨🇾', names: { en: 'Cyprus', tr: 'Kıbrıs', es: 'Chipre', fr: 'Chypre', de: 'Zypern', it: 'Cipro', pt: 'Chipre', ru: 'Кипр', ar: 'قبرص', zh: '塞浦路斯', ja: 'キプロス', hi: 'साइप्रस' }},
+                { code: 'EE', flag: '🇪🇪', names: { en: 'Estonia', tr: 'Estonya', es: 'Estonia', fr: 'Estonie', de: 'Estland', it: 'Estonia', pt: 'Estônia', ru: 'Эстония', ar: 'إستونيا', zh: '爱沙尼亚', ja: 'エストニア', hi: 'एस्टोनिया' }},
+                { code: 'LV', flag: '🇱🇻', names: { en: 'Latvia', tr: 'Letonya', es: 'Letonia', fr: 'Lettonie', de: 'Lettland', it: 'Lettonia', pt: 'Letônia', ru: 'Латвия', ar: 'لاتفيا', zh: '拉脱维亚', ja: 'ラトビア', hi: 'लातविया' }},
+                { code: 'LT', flag: '🇱🇹', names: { en: 'Lithuania', tr: 'Litvanya', es: 'Lituania', fr: 'Lituanie', de: 'Litauen', it: 'Lituania', pt: 'Lituânia', ru: 'Литва', ar: 'ليتوانيا', zh: '立陶宛', ja: 'リトアニア', hi: 'लिथुआनिया' }},
+                { code: 'SK', flag: '🇸🇰', names: { en: 'Slovakia', tr: 'Slovakya', es: 'Eslovaquia', fr: 'Slovaquie', de: 'Slowakei', it: 'Slovacchia', pt: 'Eslováquia', ru: 'Словакия', ar: 'سلوفاكيا', zh: '斯洛伐克', ja: 'スロバキア', hi: 'स्लोवाकिया' }},
+                { code: 'SI', flag: '🇸🇮', names: { en: 'Slovenia', tr: 'Slovenya', es: 'Eslovenia', fr: 'Slovénie', de: 'Slowenien', it: 'Slovenia', pt: 'Eslovênia', ru: 'Словения', ar: 'سلوفينيا', zh: '斯洛文尼亚', ja: 'スロベニア', hi: 'स्लोवेनिया' }},
+                { code: 'HR', flag: '🇭🇷', names: { en: 'Croatia', tr: 'Hırvatistan', es: 'Croacia', fr: 'Croatie', de: 'Kroatien', it: 'Croazia', pt: 'Croácia', ru: 'Хорватия', ar: 'كرواتيا', zh: '克罗地亚', ja: 'クロアチア', hi: 'क्रोएशिया' }}
+            ]
+        };
+
+        // Oyunu başlat
+        function initGame() {
+            setupEventListeners();
+            populateLanguageMenu();
+            updateLanguage('en');
+            updateDifficulty('easy');
+            loadAdMobAds();
+            generateQuestion();
+        }
+
+        // Dil menüsünü doldur
+        function populateLanguageMenu() {
+            const menu = document.getElementById('languageMenu');
+            menu.innerHTML = '';
+            
+            languages.forEach(lang => {
+                const btn = document.createElement('button');
+                btn.className = 'lang-option';
+                btn.innerHTML = `${lang.flag} ${lang.name}`;
+                btn.onclick = () => {
+                    updateLanguage(lang.code);
+                    toggleLanguageMenu();
+                };
+                menu.appendChild(btn);
+            });
+        }
+
+        // Dil menüsünü aç/kapat
+        function toggleLanguageMenu() {
+            const menu = document.getElementById('languageMenu');
+            menu.classList.toggle('active');
+            
+            // Menü dışına tıklanınca kapat
+            if (menu.classList.contains('active')) {
+                setTimeout(() => {
+                    document.addEventListener('click', closeMenuOnClickOutside);
+                }, 10);
+            } else {
+                document.removeEventListener('click', closeMenuOnClickOutside);
+            }
+        }
+
+        function closeMenuOnClickOutside(e) {
+            const menu = document.getElementById('languageMenu');
+            const button = document.querySelector('.language-btn');
+            
+            if (!menu.contains(e.target) && !button.contains(e.target)) {
+                menu.classList.remove('active');
+                document.removeEventListener('click', closeMenuOnClickOutside);
+            }
+        }
+
+        // AdMob reklamlarını yükle
+        function loadAdMobAds() {
+            try {
+                (adsbygoogle = window.adsbygoogle || []).push({});
+                updateVideoRewardButton();
+            } catch (error) {
+                console.error('AdMob yükleme hatası:', error);
+            }
+        }
+
+        // Event listener'ları kur
+        function setupEventListeners() {
+            // Zorluk butonları
+            document.querySelectorAll('.diff-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const diff = btn.dataset.diff;
+                    updateDifficulty(diff);
+                    generateQuestion();
+                });
+            });
+        }
+
+        // Dil güncelle
+        function updateLanguage(lang) {
+            gameData.currentLanguage = lang;
+            const t = translations[lang];
+            
+            // Dil butonunu güncelle
+            document.getElementById('currentLangCode').textContent = lang.toUpperCase();
+            document.getElementById('questionText').textContent = t.question;
+            document.getElementById('currentLanguage').textContent = t.langName;
+            
+            // Dil menüsündeki aktif butonu güncelle
+            document.querySelectorAll('.lang-option').forEach(opt => {
+                opt.classList.remove('active');
+                if (opt.textContent.includes(t.langName)) {
+                    opt.classList.add('active');
+                }
+            });
+            
+            // Zorluk butonlarını güncelle
+            document.querySelectorAll('.diff-btn').forEach(btn => {
+                const diff = btn.dataset.diff;
+                btn.textContent = t[diff];
+            });
+            
+            // İstatistik etiketlerini güncelle
+            document.querySelectorAll('.stat-label')[0].textContent = t.score;
+            document.querySelectorAll('.stat-label')[2].textContent = t.streak;
+            
+            // Video reklam butonunu güncelle
+            document.getElementById('rewardText').textContent = t.rewardText;
+            
+            // Eğer aktif soru varsa, cevap seçeneklerini güncelle
+            if (gameData.currentQuestion) {
+                renderAnswerOptions();
+            }
+        }
+
+        // Video reklam butonunu güncelle
+        function updateVideoRewardButton() {
+            const btn = document.getElementById('videoRewardBtn');
+            btn.disabled = !gameData.videoRewardAvailable;
+        }
+
+        // Zorluk güncelle
+        function updateDifficulty(diff) {
+            gameData.currentDifficulty = diff;
+            
+            document.querySelectorAll('.diff-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.diff === diff);
+            });
+        }
+
+        // Soru oluştur
+        function generateQuestion() {
+            clearInterval(gameData.timerInterval);
+            
+            const countryPool = countries[gameData.currentDifficulty];
+            const correctCountry = countryPool[Math.floor(Math.random() * countryPool.length)];
+            
+            const wrongCountries = [];
+            const usedCodes = new Set([correctCountry.code]);
+            
+            while (wrongCountries.length < 3) {
+                const randomCountry = countryPool[Math.floor(Math.random() * countryPool.length)];
+                if (!usedCodes.has(randomCountry.code)) {
+                    wrongCountries.push(randomCountry);
+                    usedCodes.add(randomCountry.code);
+                }
+            }
+            
+            const allOptions = [correctCountry, ...wrongCountries];
+            shuffleArray(allOptions);
+            
+            const correctIndex = allOptions.findIndex(opt => opt.code === correctCountry.code);
+            
+            gameData.currentQuestion = {
+                country: correctCountry,
+                options: allOptions,
+                correctIndex: correctIndex
+            };
+            
+            document.getElementById('flagDisplay').textContent = correctCountry.flag;
+            renderAnswerOptions();
+            startTimer();
+            
+            gameData.questionsSinceLastAd++;
+            gameData.totalQuestions++;
+            
+            if (gameData.questionsSinceLastAd >= 10) {
+                gameData.questionsSinceLastAd = 0;
+                setTimeout(showInterstitialAd, 1000);
+            }
+            
+            if (gameData.totalQuestions % 3 === 0) {
+                gameData.videoRewardAvailable = true;
+                updateVideoRewardButton();
+            }
+            
+            updateStats();
+        }
+
+        // Cevap seçeneklerini render et
+        function renderAnswerOptions() {
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+            
+            gameData.currentQuestion.options.forEach((country, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = country.names[gameData.currentLanguage];
+                btn.onclick = () => checkAnswer(index);
+                container.appendChild(btn);
+            });
+        }
+
+        // Cevabı kontrol et
+        function checkAnswer(selectedIndex) {
+            if (!gameData.isGameActive) return;
+            
+            clearInterval(gameData.timerInterval);
+            gameData.isGameActive = false;
+            
+            const correctIndex = gameData.currentQuestion.correctIndex;
+            const isCorrect = selectedIndex === correctIndex;
+            const buttons = document.querySelectorAll('.option-btn');
+            
+            buttons.forEach((btn, index) => {
+                if (index === correctIndex) {
+                    btn.classList.add('correct');
+                } else if (index === selectedIndex && !isCorrect) {
+                    btn.classList.add('wrong');
+                }
+                btn.style.pointerEvents = 'none';
+            });
+            
+            const timeLeft = parseInt(document.getElementById('timerDisplay').textContent);
+            let points = 0;
+            
+            if (isCorrect) {
+                points = 100 + (timeLeft * 5);
+                gameData.correctAnswers++;
+                gameData.currentStreak++;
+                
+                if (gameData.currentStreak > gameData.maxStreak) {
+                    gameData.maxStreak = gameData.currentStreak;
+                }
+            } else {
+                points = 0;
+                gameData.currentStreak = 0;
+            }
+            
+            gameData.score += points;
+            updateStats();
+            
+            setTimeout(() => {
+                if (gameData.totalQuestions >= 10) {
+                    endGame();
+                } else {
+                    generateQuestion();
+                }
+            }, 1500);
+        }
+
+        // Timer'ı başlat
+        function startTimer() {
+            clearInterval(gameData.timerInterval);
+            gameData.timer = 20;
+            gameData.isGameActive = true;
+            
+            document.getElementById('timerDisplay').textContent = gameData.timer;
+            document.getElementById('timeFill').style.width = '100%';
+            
+            gameData.timerInterval = setInterval(() => {
+                gameData.timer--;
+                document.getElementById('timerDisplay').textContent = gameData.timer;
+                
+                const width = (gameData.timer / 20) * 100;
+                document.getElementById('timeFill').style.width = `${width}%`;
+                
+                if (gameData.timer <= 0) {
+                    clearInterval(gameData.timerInterval);
+                    timeUp();
+                }
+            }, 1000);
+        }
+
+        // Süre doldu
+        function timeUp() {
+            if (!gameData.isGameActive) return;
+            
+            gameData.isGameActive = false;
+            gameData.currentStreak = 0;
+            
+            const buttons = document.querySelectorAll('.option-btn');
+            const correctIndex = gameData.currentQuestion.correctIndex;
+            
+            buttons.forEach((btn, index) => {
+                if (index === correctIndex) {
+                    btn.classList.add('correct');
+                }
+                btn.style.pointerEvents = 'none';
+            });
+            
+            updateStats();
+            
+            setTimeout(() => {
+                if (gameData.totalQuestions >= 10) {
+                    endGame();
+                } else {
+                    generateQuestion();
+                }
+            }, 1500);
+        }
+
+        // İstatistikleri güncelle
+        function updateStats() {
+            document.getElementById('score').textContent = gameData.score;
+            document.getElementById('questions').textContent = `${gameData.totalQuestions}/10`;
+            document.getElementById('streak').textContent = gameData.currentStreak;
+        }
+
+        // Oyunu bitir
+        function endGame() {
+            const t = translations[gameData.currentLanguage];
+            
+            document.getElementById('finalScore').textContent = gameData.score;
+            document.getElementById('finalCorrect').textContent = gameData.correctAnswers;
+            document.getElementById('finalStreak').textContent = gameData.maxStreak;
+            
+            const accuracy = gameData.totalQuestions > 0 ? 
+                Math.round((gameData.correctAnswers / gameData.totalQuestions) * 100) : 0;
+            document.getElementById('finalAccuracy').textContent = `${accuracy}%`;
+            
+            document.getElementById('resultTitle').textContent = t.gameOver || 'Game Over!';
+            document.getElementById('resultScreen').style.display = 'flex';
+            
+            setTimeout(showInterstitialAd, 1000);
+        }
+
+        // Oyunu yeniden başlat
+        function restartGame() {
+            gameData.score = 0;
+            gameData.correctAnswers = 0;
+            gameData.totalQuestions = 0;
+            gameData.currentStreak = 0;
+            gameData.maxStreak = 0;
+            gameData.adCounter = 0;
+            gameData.questionsSinceLastAd = 0;
+            gameData.videoRewardAvailable = true;
+            
+            updateStats();
+            document.getElementById('resultScreen').style.display = 'none';
+            updateVideoRewardButton();
+            generateQuestion();
+        }
+
+        // INTERSTITIAL REKLAM
+        function showInterstitialAd() {
+            try {
+                document.getElementById('interstitialAd').style.display = 'flex';
+                gameData.lastAdTime = Date.now();
+            } catch (error) {
+                console.error('Interstitial reklam hatası:', error);
+                showFallbackInterstitial();
+            }
+        }
+
+        function showFallbackInterstitial() {
+            document.getElementById('interstitialAd').style.display = 'flex';
+            gameData.lastAdTime = Date.now();
+        }
+
+        function closeInterstitial() {
+            document.getElementById('interstitialAd').style.display = 'none';
+        }
+
+        // REWARD VIDEO REKLAM
+        function showRewardVideoAd() {
+            if (!gameData.videoRewardAvailable) return;
+            
+            try {
+                giveVideoReward();
+                gameData.videoRewardAvailable = false;
+                updateVideoRewardButton();
+            } catch (error) {
+                giveVideoReward();
+                gameData.videoRewardAvailable = false;
+                updateVideoRewardButton();
+            }
+        }
+
+        function watchRewardVideo() {
+            closeInterstitial();
+            showRewardVideoAd();
+        }
+
+        function giveVideoReward() {
+            gameData.timer += 10;
+            document.getElementById('timerDisplay').textContent = gameData.timer;
+            alert('Congratulations! You earned +10 seconds extra time!');
+        }
+
+        // Yardımcı fonksiyon: Array karıştırma
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Sayfa yüklendiğinde oyunu başlat
+        window.addEventListener('DOMContentLoaded', initGame);
+        window.addEventListener('load', function() {
+            setTimeout(loadAdMobAds, 1000);
+        });
+    </script>
+</body>
+</html>
